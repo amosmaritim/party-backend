@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tushy - Movie Events & Bookings</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>TUSHY</h1>
+        <p>Premium Cinema Experience</p>
+      </div>
+      <nav>
+        <a href="#events">Events</a>
+        <a href="#booking-space">Booking Space</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Experience Cinema Like Never Before</h2>
+      <p>Book your tickets for upcoming movie events</p>
+      <a href="#events" class="btn-primary">Explore Events</a>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section id="events" class="events-section">
+    <div class="container">
+      <h2 class="section-title">Upcoming Movie Events</h2>
+      <div class="events-grid">
+        <!-- Event 1: was $15 -> KSh 2,000 -->
+        <div class="event-card">
+          <div class="event-image">
+            <div class="event-badge">PREMIERE</div>
+            <div class="placeholder-img">🎬</div>
+          </div>
+          <div class="event-details">
+            <h3>The Dark Chronicles</h3>
+            <p class="event-info">Action | Thriller | 2h 30m</p>
+            <p class="event-date">October 20, 2025 | 7:00 PM</p>
+            <p class="event-price">KSh 2,000</p>
+            <!-- price passed in KSh; clicking goes straight to payment modal -->
+            <button class="btn-book" onclick="openPaymentForMovie('The Dark Chronicles', 2000)">Book Tickets</button>
+          </div>
+        </div>
+
+        <!-- Event 2: was $12 -> KSh 1,600 -->
+        <div class="event-card">
+          <div class="event-image">
+            <div class="event-badge">NEW</div>
+            <div class="placeholder-img">🎭</div>
+          </div>
+          <div class="event-details">
+            <h3>Midnight Symphony</h3>
+            <p class="event-info">Drama | Mystery | 2h 15m</p>
+            <p class="event-date">October 22, 2025 | 8:30 PM</p>
+            <p class="event-price">KSh 1,600</p>
+            <button class="btn-book" onclick="openPaymentForMovie('Midnight Symphony', 1600)">Book Tickets</button>
+          </div>
+        </div>
+
+        <!-- Event 3: was $10 -> KSh 1,350 -->
+        <div class="event-card">
+          <div class="event-image">
+            <div class="event-badge">CLASSIC</div>
+            <div class="placeholder-img">🎥</div>
+          </div>
+          <div class="event-details">
+            <h3>Noir Nights</h3>
+            <p class="event-info">Classic | Film Noir | 1h 50m</p>
+            <p class="event-date">October 25, 2025 | 6:00 PM</p>
+            <p class="event-price">KSh 1,350</p>
+            <button class="btn-book" onclick="openPaymentForMovie('Noir Nights', 1350)">Book Tickets</button>
+          </div>
+        </div>
+
+        <!-- Event 4: was $18 -> KSh 2,400 -->
+        <div class="event-card">
+          <div class="event-image">
+            <div class="event-badge">EXCLUSIVE</div>
+            <div class="placeholder-img">🌟</div>
+          </div>
+          <div class="event-details">
+            <h3>Starlight Premiere</h3>
+            <p class="event-info">Sci-Fi | Adventure | 2h 45m</p>
+            <p class="event-date">October 28, 2025 | 9:00 PM</p>
+            <p class="event-price">KSh 2,400</p>
+            <button class="btn-book" onclick="openPaymentForMovie('Starlight Premiere', 2400)">Book Tickets</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking Space Section (prices converted to KSh) -->
+  <section id="booking-space" class="booking-space-section">
+    <div class="container">
+      <h2 class="section-title">Book Our Premium Space</h2>
+      <p class="section-subtitle">Host private screenings, corporate events, or special celebrations</p>
+
+      <div class="space-grid">
+        <!-- Grand Theater: Full KSh 106,700 / Half KSh 60,000 -->
+        <div class="space-card">
+          <div class="space-image"><div class="space-icon">🎪</div></div>
+          <div class="space-details">
+            <h3>Grand Theater</h3>
+            <div class="space-features">
+              <span>👥 Capacity: 150 seats</span>
+              <span>📽️ 4K Laser Projection</span>
+              <span>🔊 Dolby Atmos Sound</span>
+              <span>⏱️ Full Day: KSh 106,700</span>
+              <span>⏱️ Half Day: KSh 60,000</span>
+            </div>
+            <button class="btn-book" onclick="openSpaceBooking('Grand Theater', 106700, 60000)">Book Space</button>
+          </div>
+        </div>
+
+        <!-- VIP Lounge: Full KSh 66,700 / Half KSh 40,000 -->
+        <div class="space-card">
+          <div class="space-image"><div class="space-icon">🎬</div></div>
+          <div class="space-details">
+            <h3>VIP Lounge</h3>
+            <div class="space-features">
+              <span>👥 Capacity: 40 seats</span>
+              <span>🛋️ Luxury Recliners</span>
+              <span>🍿 Catering Available</span>
+              <span>⏱️ Full Day: KSh 66,700</span>
+              <span>⏱️ Half Day: KSh 40,000</span>
+            </div>
+            <button class="btn-book" onclick="openSpaceBooking('VIP Lounge', 66700, 40000)">Book Space</button>
+          </div>
+        </div>
+
+        <!-- Intimate Studio: Full KSh 46,700 / Half KSh 26,700 -->
+        <div class="space-card">
+          <div class="space-image"><div class="space-icon">🎞️</div></div>
+          <div class="space-details">
+            <h3>Intimate Studio</h3>
+            <div class="space-features">
+              <span>👥 Capacity: 25 seats</span>
+              <span>🎨 Art House Atmosphere</span>
+              <span>☕ Complimentary Refreshments</span>
+              <span>⏱️ Full Day: KSh 46,700</span>
+              <span>⏱️ Half Day: KSh 26,700</span>
+            </div>
+            <button class="btn-book" onclick="openSpaceBooking('Intimate Studio', 46700, 26700)">Book Space</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="gallery-section">
+    <div class="container">
+      <h2 class="section-title">Gallery</h2>
+
+      <div class="gallery-filters" role="tablist" aria-label="Gallery filters">
+        <button class="filter-btn active" data-category="all" onclick="filterGallery('all', event)">All</button>
+        <button class="filter-btn" data-category="events" onclick="filterGallery('events', event)">Events</button>
+        <button class="filter-btn" data-category="behind" onclick="filterGallery('behind', event)">Behind the Scenes</button>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- 15 images: deb.jpeg -> deb14.jpeg (images/ folder) -->
+        <div class="gallery-item" data-category="events"><img src="images/deb.jpeg" alt="Deb"><div class="gallery-caption">Deb</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb1.jpeg" alt="Deb 1"><div class="gallery-caption">Deb 1</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb2.jpeg" alt="Deb 2"><div class="gallery-caption">Deb 2</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb3.jpeg" alt="Deb 3"><div class="gallery-caption">Deb 3</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb4.jpeg" alt="Deb 4"><div class="gallery-caption">Deb 4</div></div>
+
+        <div class="gallery-item" data-category="behind"><img src="images/deb5.jpeg" alt="Deb 5"><div class="gallery-caption">Deb 5</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb6.jpeg" alt="Deb 6"><div class="gallery-caption">Deb 6</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb7.jpeg" alt="Deb 7"><div class="gallery-caption">Deb 7</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb8.jpeg" alt="Deb 8"><div class="gallery-caption">Deb 8</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb9.jpeg" alt="Deb 9"><div class="gallery-caption">Deb 9</div></div>
+
+        <div class="gallery-item" data-category="events"><img src="images/deb10.jpeg" alt="Deb 10"><div class="gallery-caption">Deb 10</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb11.jpeg" alt="Deb 11"><div class="gallery-caption">Deb 11</div></div>
+        <div class="gallery-item" data-category="events"><img src="images/deb12.jpeg" alt="Deb 12"><div class="gallery-caption">Deb 12</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb13.jpeg" alt="Deb 13"><div class="gallery-caption">Deb 13</div></div>
+        <div class="gallery-item" data-category="behind"><img src="images/deb14.jpeg" alt="Deb 14"><div class="gallery-caption">Deb 14</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>CINEMAX</h3>
+          <p>Your premier destination for movie events and entertainment.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <a href="#events">Events</a>
+          <a href="#booking-space">Book Space</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#contact">Contact Us</a>
+        </div>
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <p>Email: info@cinemax.com</p>
+          <p>Phone: +1 (555) 123-4567</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 CineMax. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- PAYMENT MODAL (hidden by default) -->
+  <div id="paymentModal" class="modal" aria-hidden="true">
+    <div class="modal-content payment-modal-card" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+      <span class="close" onclick="closePayment()" aria-label="Close">&times;</span>
+      <h3 id="paymentTitle">Complete Payment</h3>
+      <p id="paymentSubtitle" class="muted">Fill in your details to pay via M-Pesa</p>
+
+      <form id="paymentFormModal">
+        <label for="pm_name">Name</label>
+        <input id="pm_name" type="text" placeholder="Your name" required>
+
+        <label for="pm_email">Email</label>
+        <input id="pm_email" type="email" placeholder="you@example.com" required>
+
+        <label for="pm_phone">Phone</label>
+        <input id="pm_phone" type="tel" placeholder="2547XXXXXXXX" pattern="[0-9]+" required>
+
+        <div class="payment-qty-row">
+          <label for="pm_qty">Quantity</label>
+          <div class="qty-controls">
+            <button type="button" onclick="changePaymentQty(-1)">-</button>
+            <input id="pm_qty" type="number" min="1" max="10" value="1">
+            <button type="button" onclick="changePaymentQty(1)">+</button>
+          </div>
+        </div>
+
+        <label for="pm_amount">Amount (KSh)</label>
+        <input id="pm_amount" type="number" readonly>
+
+        <input type="hidden" id="pm_eventName">
+
+        <button type="submit" class="btn-primary wide">Pay KSh <span id="pm_amount_text"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Link the external JavaScript file -->
+  <script src="script.js"></script>
+</body>
+</html>
