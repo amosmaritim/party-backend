@@ -250,7 +250,10 @@
 
         <input type="hidden" id="pm_eventName">
 
-        <button type="submit" class="btn-primary wide">Pay KSh <span id="pm_amount_text"></span></button>
+        <button type="submit" id="pm_submitBtn" class="btn-primary wide">Pay KSh <span id="pm_amount_text"></span></button>
+
+        <div id="paymentStatus" class="payment-status" role="status" aria-live="polite"></div>
+        <p class="payment-hint muted">We’ll send an STK prompt to the phone number above. Approve it to confirm your booking.</p>
       </form>
     </div>
   </div>

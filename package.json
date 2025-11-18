@@ -1,15 +1,22 @@
 {
   "name": "party-backend",
   "version": "1.0.0",
+  "description": "Serverless backend for the Tushy cinema booking/payment experience",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vercel dev",
+    "deploy": "vercel --prod",
+    "lint": "echo \"Add your preferred linter\"",
+    "test": "echo \"No tests yet\" && exit 0"
   },
-  "keywords": [],
+  "keywords": [
+    "mpesa",
+    "vercel",
+    "supabase"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "bcrypt": "^6.0.0"
+    "@supabase/supabase-js": "^2.81.1"
   }
 }

@@ -1,6 +1,61 @@
 // Basic globals
 let currentEventName = '';
 let currentEventPrice = 0; // in KSh
+let paymentSubmitController = null;
+
+const paymentStatusEl = document.getElementById('paymentStatus');
+const paymentSubmitBtn = document.getElementById('pm_submitBtn');
+const paymentSubtitleEl = document.getElementById('paymentSubtitle');
+
+const PAYMENT_STATUS_CLASSES = [
+  'payment-status--info',
+  'payment-status--success',
+  'payment-status--error'
+];
+
+const defaultStatusMessage =
+  'Submit your details to receive an STK push on your phone.';
+
+function setPaymentStatus(type = 'info', message = '') {
+  if (!paymentStatusEl) return;
+  paymentStatusEl.textContent = message;
+  PAYMENT_STATUS_CLASSES.forEach((cls) => paymentStatusEl.classList.remove(cls));
+  if (type) paymentStatusEl.classList.add(`payment-status--${type}`);
+}
+
+function togglePaymentSubmitting(isSubmitting) {
+  if (paymentSubmitBtn) {
+    paymentSubmitBtn.disabled = !!isSubmitting;
+    paymentSubmitBtn.classList.toggle('is-loading', !!isSubmitting);
+  }
+}
+
+function resetPaymentFeedback(customMessage) {
+  togglePaymentSubmitting(false);
+  setPaymentStatus('info', customMessage || defaultStatusMessage);
+}
+
+const normalizePhoneForBackend = (raw) => {
+  if (!raw) return '';
+  const digits = raw.replace(/\D/g, '');
+  if (digits.startsWith('254') && digits.length === 12) return digits;
+  if (digits.startsWith('0') && digits.length === 10) return `254${digits.slice(1)}`;
+  if (digits.startsWith('7') && digits.length === 9) return `254${digits}`;
+  return digits; // backend will validate
+};
+
+const formatPhoneForDisplay = (raw) => {
+  const normalized = normalizePhoneForBackend(raw);
+  if (!normalized) return '';
+  return normalized.startsWith('254') ? `+${normalized}` : normalized;
+};
+
+function abortInFlightPayment() {
+  if (paymentSubmitController) {
+    paymentSubmitController.abort();
+    paymentSubmitController = null;
+  }
+}
 
 /* ---------- Open payment modal immediately when user clicks Book Tickets ---------- */
 /**
@@ -12,6 +67,14 @@ let currentEventPrice = 0; // in KSh
 function openPaymentForMovie(eventName, priceInKsh) {
   currentEventName = eventName;
   currentEventPrice = Number(priceInKsh) || 0;
+
+  if (paymentSubtitleEl) {
+    paymentSubtitleEl.textContent = `Paying for ${eventName}`;
+  }
+
+  resetPaymentFeedback(
+    `You’re booking ${eventName}. Submit to receive an STK push on your phone.`
+  );
 
   // set modal visible
   const paymentModal = document.getElementById('paymentModal');
@@ -40,10 +103,17 @@ function openPaymentForMovie(eventName, priceInKsh) {
 
 /* Close payment modal */
 function closePayment() {
+  abortInFlightPayment();
+  resetPaymentFeedback();
+
   const paymentModal = document.getElementById('paymentModal');
   if (!paymentModal) return;
   paymentModal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = 'auto';
+
+  if (paymentSubtitleEl) {
+    paymentSubtitleEl.textContent = 'Fill in your details to pay via M-Pesa';
+  }
 }
 
 /* Change quantity using +/- */
@@ -77,7 +147,8 @@ if (paymentFormModal) {
 
     const name = document.getElementById('pm_name')?.value.trim();
     const email = document.getElementById('pm_email')?.value.trim();
-    const phone = document.getElementById('pm_phone')?.value.trim();
+    const phoneInput = document.getElementById('pm_phone')?.value.trim();
+    const phone = normalizePhoneForBackend(phoneInput);
     const qty = Number(document.getElementById('pm_qty')?.value || 1);
     const amount = Number(document.getElementById('pm_amount')?.value || 0);
     const eventName = document.getElementById('pm_eventName')?.value || currentEventName;
@@ -89,22 +160,69 @@ if (paymentFormModal) {
 
     // Example payload to backend: adjust endpoint as needed
     try {
+      abortInFlightPayment();
+      setPaymentStatus(
+        'info',
+        `Sending STK push to ${formatPhoneForDisplay(phone) || 'your phone'}...`
+      );
+      togglePaymentSubmitting(true);
+      paymentSubmitController = new AbortController();
+
       const res = await fetch('/api/stk-push', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: paymentSubmitController.signal,
         body: JSON.stringify({
           name, email, phone, amount, qty, eventName, currency: 'KSH'
         })
       });
 
-      const data = await res.json();
-      alert(data.message || 'Payment initiated. Check your phone for the STK prompt.');
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        console.warn('Unable to parse payment response JSON', jsonErr);
+      }
 
-      // close modal on success
-      closePayment();
+      if (!res.ok) {
+        const errorMsg =
+          data?.message ||
+          `Payment failed with status ${res.status}. Please try again.`;
+        setPaymentStatus('error', errorMsg);
+        return;
+      }
+
+      const successMessage =
+        data?.message ||
+        `Payment request sent. Check ${formatPhoneForDisplay(phone)} for the STK prompt.`;
+      const references = [data?.checkoutRequestId, data?.merchantRequestId]
+        .filter(Boolean)
+        .join(' | ');
+
+      setPaymentStatus(
+        'success',
+        references ? `${successMessage} Ref: ${references}` : successMessage
+      );
+
+      // Optionally close modal after short delay
+      setTimeout(() => {
+        closePayment();
+        alert(
+          successMessage +
+            (references ? `\nReference: ${references}` : '')
+        );
+      }, 400);
     } catch (err) {
       console.error('Payment error', err);
+      if (err.name === 'AbortError') return;
+      setPaymentStatus(
+        'error',
+        err?.message || 'Failed to initiate payment. Please try again later.'
+      );
       alert('Failed to initiate payment. Please try again later.');
+    } finally {
+      togglePaymentSubmitting(false);
+      paymentSubmitController = null;
     }
   });
 }
@@ -195,4 +313,5 @@ document.addEventListener('DOMContentLoaded', function () {
   // ensure payment modal hidden
   const pm = document.getElementById('paymentModal');
   if (pm) pm.setAttribute('aria-hidden', 'true');
+  resetPaymentFeedback();
 });
