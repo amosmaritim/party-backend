@@ -18,23 +18,7 @@
       "use": "@vercel/static"
     },
     {
-      "src": "*.jpeg",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.jpg",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "*.png",
-      "use": "@vercel/static"
-    },
-    {
       "src": "images/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "public/images/**",
       "use": "@vercel/static"
     }
   ],
@@ -42,6 +26,13 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     },
     {
       "src": "/(.*)",
