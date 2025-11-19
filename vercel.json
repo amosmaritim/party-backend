@@ -20,12 +20,20 @@
     {
       "src": "images/**",
       "use": "@vercel/static"
+    },
+    {
+      "src": "public/images/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/public/images/$1"
     },
     {
       "src": "/(.*)",
