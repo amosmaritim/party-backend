@@ -18,6 +18,18 @@
       "use": "@vercel/static"
     },
     {
+      "src": "*.jpeg",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.jpg",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "*.png",
+      "use": "@vercel/static"
+    },
+    {
       "src": "images/**",
       "use": "@vercel/static"
     },
@@ -30,10 +42,6 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/public/images/$1"
     },
     {
       "src": "/(.*)",
